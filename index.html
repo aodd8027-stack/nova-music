@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>NOVA MUSIC</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+         :root {
+            --bg: #090711;
+            --card: #171326;
+            --card2: #211936;
+            --purple: #9b5cff;
+            --pink: #e65bda;
+            --text: #ffffff;
+            --muted: #aaa2bd;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            padding: 18px 16px 100px;
+            min-height: 100vh;
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #9b5cff, #e65bda);
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+            box-shadow: 0 5px 25px #9b5cff55;
+        }
+        
+        .brand h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        
+        .brand p {
+            color: var(--muted);
+            font-size: 10px;
+        }
+        
+        .profile {
+            width: 42px;
+            height: 42px;
+            border-radius: 15px;
+            background: var(--card2);
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+        
+        .hero {
+            padding: 24px 19px;
+            border-radius: 24px;
+            background: radial-gradient(circle at 10% 20%, #b64ee944, transparent 40%), linear-gradient(135deg, #342052, #171027 75%);
+            min-height: 190px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .hero small {
+            color: #e6bcff;
+            font-size: 12px;
+        }
+        
+        .hero h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-top: 12px;
+        }
+        
+        .hero p {
+            color: #d0c4df;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .hero .music-icon {
+            position: absolute;
+            left: 15px;
+            bottom: 12px;
+            font-size: 80px;
+            opacity: .6;
+        }
+        
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px;
+            background: var(--card);
+            border: 1px solid #302342;
+            border-radius: 17px;
+            margin-bottom: 27px;
+        }
+        
+        .search span {
+            font-size: 20px;
+        }
+        
+        .search input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 100%;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .search input::placeholder {
+            color: #898097;
+        }
+        
+        .section {
+            margin-bottom: 28px;
+        }
+        
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-head h3 {
+            font-size: 17px;
+        }
+        
+        .section-head span {
+            color: #bd87ff;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 11px;
+        }
+        
+        .category {
+            min-height: 85px;
+            border-radius: 17px;
+            padding: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: right;
+            color: white;
+            background: var(--card);
+            border: 1px solid #302342;
+            transition: .2s;
+        }
+        
+        .category:active {
+            transform: scale(.96);
+        }
+        
+        .category .icon {
+            font-size: 27px;
+        }
+        
+        .category strong {
+            font-size: 13px;
+            display: block;
+        }
+        
+        .category small {
+            color: var(--muted);
+            font-size: 10px;
+        }
+        
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .song {
+            background: var(--card);
+            border: 1px solid #292039;
+            border-radius: 17px;
+            padding: 11px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .cover {
+            width: 55px;
+            height: 55px;
+            min-width: 55px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+            background: linear-gradient(135deg, #7136a4, #d04a9c);
+        }
+        
+        .song-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .song-info h4 {
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .song-info p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        
+        .song-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        
+        .play {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9b5cff, #df5bd8);
+            color: white;
+            font-size: 15px;
+        }
+        
+        .fav {
+            background: transparent;
+            color: #aaa2bd;
+            font-size: 20px;
+        }
+        
+        .fav.active {
+            color: #ff5c9d;
+        }
+        
+        .empty {
+            text-align: center;
+            padding: 28px 10px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 18px 20px;
+            display: flex;
+            justify-content: space-around;
+            background: #100c1bec;
+            border-top: 1px solid #302342;
+            backdrop-filter: blur(15px);
+        }
+        
+        .nav-item {
+            background: transparent;
+            color: #8c849b;
+            text-align: center;
+            font-size: 10px;
+        }
+        
+        .nav-item span {
+            display: block;
+            font-size: 21px;
+            margin-bottom: 3px;
+        }
+        
+        .nav-item.active {
+            color: #c18cff;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #322344;
+            border: 1px solid #9b5cff;
+            border-radius: 13px;
+            padding: 12px 18px;
+            font-size: 12px;
+            white-space: nowrap;
+            display: none;
+            z-index: 10;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #716981;
+            font-size: 10px;
+            margin-top: 30px;
+        }
+        
+        @media (min-width: 600px) {
+            body {
+                max-width: 650px;
+                margin: auto;
+            }
+            .categories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="logo">🎧</div>
+
+            <div>
+                <h1>NOVA MUSIC</h1>
+                <p>YOUR MUSIC. YOUR WORLD.</p>
+            </div>
+
+        </div>
+
+        <div class="profile">🎵</div>
+
+    </header>
+
+
+    <section class="hero">
+
+        <small>مرحباً بك في عالم الموسيقى</small>
+
+        <h2>اكتشف موسيقاك 🎶</h2>
+
+        <p>
+            أغانيك المفضلة وفنانوك المفضلون بمكان واحد.
+        </p>
+
+        <div class="music-icon">♫</div>
+
+    </section>
+
+
+    <div class="search">
+
+        <span>🔍</span>
+
+        <input id="searchInput" type="text" placeholder="ابحث عن أغنية أو فنان..." autocomplete="off">
+
+    </div>
+
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <h3>🎼 الأقسام الموسيقية</h3>
+
+            <span onclick="showAll()">عرض الكل</span>
+
+        </div>
+
+        <div class="categories">
+
+            <button class="category" onclick="filterCategory('عربي')">
+                <span class="icon">🎵</span>
+                <span>
+                    <strong>أغاني عربية</strong>
+                    <small>الموسيقى العربية</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('أجنبي')">
+                <span class="icon">🌍</span>
+                <span>
+                    <strong>أغاني أجنبية</strong>
+                    <small>موسيقى العالم</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('عراقي')">
+                <span class="icon">🇮🇶</span>
+                <span>
+                    <strong>أغاني عراقية</strong>
+                    <small>الفن العراقي</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('خليجي')">
+                <span class="icon">🇸🇦</span>
+                <span>
+                    <strong>أغاني خليجية</strong>
+                    <small>الموسيقى الخليجية</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('مصري')">
+                <span class="icon">🇪🇬</span>
+                <span>
+                    <strong>أغاني مصرية</strong>
+                    <small>الفن المصري</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('طرب')">
+                <span class="icon">🎻</span>
+                <span>
+                    <strong>طرب</strong>
+                    <small>أصالة الموسيقى</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('حزين')">
+                <span class="icon">💔</span>
+                <span>
+                    <strong>أغاني حزينة</strong>
+                    <small>ألحان هادئة</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('رومانسي')">
+                <span class="icon">❤️</span>
+                <span>
+                    <strong>رومانسي</strong>
+                    <small>أجمل الألحان</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('حماسي')">
+                <span class="icon">🔥</span>
+                <span>
+                    <strong>حماسي</strong>
+                    <small>طاقة وحيوية</small>
+                </span>
+            </button>
+
+            <button class="category" onclick="filterCategory('كلاسيكي')">
+                <span class="icon">🎹</span>
+                <span>
+                    <strong>كلاسيكي</strong>
+                    <small>موسيقى كلاسيكية</small>
+                </span>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <h3 id="songsTitle">🔥 اكتشف الموسيقى</h3>
+
+            <span onclick="showAll()">الكل</span>
+
+        </div>
+
+        <div class="song-list" id="songList"></div>
+
+    </section>
+
+
+    <div class="footer">
+        NOVA MUSIC · YOUR MUSIC. YOUR WORLD.
+    </div>
+
+
+    <nav class="bottom-nav">
+
+        <button class="nav-item active" onclick="goHome(this)">
+            <span>🏠</span>
+            الرئيسية
+        </button>
+
+        <button class="nav-item" onclick="goSearch(this)">
+            <span>🔍</span>
+            البحث
+        </button>
+
+        <button class="nav-item" onclick="showFavorites(this)">
+            <span>❤️</span>
+            المفضلة
+        </button>
+
+    </nav>
+
+
+    <div class="toast" id="toast"></div>
+
+
+    <script>
+        // Telegram Mini App initialization
+
+        const tg = window.Telegram ? .WebApp;
+
+        if (tg) {
+            tg.ready();
+            tg.expand();
+
+            try {
+                tg.setHeaderColor("#090711");
+                tg.setBackgroundColor("#090711");
+            } catch (e) {
+                console.log("Telegram theme setup skipped");
+            }
+        }
+
+
+        // بيانات تجريبية للواجهة فقط.
+        // سيتم ربط الأغاني الحقيقية بمصدر موسيقي مرخص لاحقاً.
+
+        const songs = [
+
+            {
+                id: 1,
+                title: "نسمة ليل",
+                artist: "فنان تجريبي",
+                category: "عراقي",
+                icon: "🌙"
+            },
+
+            {
+                id: 2,
+                title: "طريق النجوم",
+                artist: "فنان تجريبي",
+                category: "أجنبي",
+                icon: "✨"
+            },
+
+            {
+                id: 3,
+                title: "ليلة هادئة",
+                artist: "فنان تجريبي",
+                category: "عربي",
+                icon: "🌌"
+            },
+
+            {
+                id: 4,
+                title: "نبض الخليج",
+                artist: "فنان تجريبي",
+                category: "خليجي",
+                icon: "🌴"
+            },
+
+            {
+                id: 5,
+                title: "أيام الطرب",
+                artist: "فنان تجريبي",
+                category: "طرب",
+                icon: "🎻"
+            },
+
+            {
+                id: 6,
+                title: "قلب هادئ",
+                artist: "فنان تجريبي",
+                category: "رومانسي",
+                icon: "💜"
+            },
+
+            {
+                id: 7,
+                title: "ألحان المساء",
+                artist: "فنان تجريبي",
+                category: "مصري",
+                icon: "🎼"
+            },
+
+            {
+                id: 8,
+                title: "إيقاع جديد",
+                artist: "فنان تجريبي",
+                category: "حماسي",
+                icon: "🔥"
+            }
+
+        ];
+
+
+        let currentSongs = [...songs];
+
+        let favorites = JSON.parse(
+            localStorage.getItem("nova_favorites") || "[]"
+        );
+
+
+        function showToast(message) {
+
+            const toast = document.getElementById("toast");
+
+            toast.textContent = message;
+            toast.style.display = "block";
+
+            clearTimeout(window.toastTimer);
+
+            window.toastTimer = setTimeout(() => {
+                toast.style.display = "none";
+            }, 2400);
+
+        }
+
+
+        function renderSongs(list) {
+
+            const container = document.getElementById("songList");
+
+            container.innerHTML = "";
+
+            if (!list.length) {
+
+                container.innerHTML =
+                    '<div class="empty">ما لكينا نتائج بهالبحث 🎵</div>';
+
+                return;
+            }
+
+            list.forEach(song => {
+
+                const isFav = favorites.includes(song.id);
+
+                const card = document.createElement("div");
+
+                card.className = "song";
+
+                card.innerHTML = `
+
+                <div class="cover">${song.icon}</div>
+
+                <div class="song-info">
+
+                    <h4>${song.title}</h4>
+
+                    <p>${song.artist} · ${song.category}</p>
+
+                </div>
+
+                <div class="song-actions">
+
+                    <button class="fav ${isFav ? "active" : ""}"
+                            onclick="toggleFavorite(${song.id})">
+                        ${isFav ? "♥" : "♡"}
+                    </button>
+
+                    <button class="play"
+                            onclick="playSong(${song.id})">
+                        ▶
+                    </button>
+
+                </div>
+
+            `;
+
+                container.appendChild(card);
+
+            });
+
+        }
+
+
+        function filterCategory(category) {
+
+            currentSongs = songs.filter(
+                song => song.category === category
+            );
+
+            document.getElementById("songsTitle").textContent =
+                "🎵 " + category;
+
+            renderSongs(currentSongs);
+
+            document.getElementById("songList").scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
+
+        function showAll() {
+
+            currentSongs = [...songs];
+
+            document.getElementById("songsTitle").textContent =
+                "🔥 اكتشف الموسيقى";
+
+            document.getElementById("searchInput").value = "";
+
+            renderSongs(currentSongs);
+
+        }
+
+
+        function toggleFavorite(id) {
+
+            if (favorites.includes(id)) {
+
+                favorites = favorites.filter(
+                    item => item !== id
+                );
+
+                showToast("انحذفت من المفضلة");
+
+            } else {
+
+                favorites.push(id);
+
+                showToast("انضافت للمفضلة ❤️");
+
+            }
+
+            localStorage.setItem(
+                "nova_favorites",
+                JSON.stringify(favorites)
+            );
+
+            renderSongs(currentSongs);
+
+        }
+
+
+        function showFavorites(button) {
+
+            setActiveNav(button);
+
+            currentSongs = songs.filter(
+                song => favorites.includes(song.id)
+            );
+
+            document.getElementById("songsTitle").textContent =
+                "❤️ الأغاني المفضلة";
+
+            renderSongs(currentSongs);
+
+        }
+
+
+        function playSong(id) {
+
+            const song = songs.find(
+                item => item.id === id
+            );
+
+            if (!song) return;
+
+            showToast(
+                "سيتم تفعيل الاستماع بعد ربط مصدر الموسيقى 🎧"
+            );
+
+        }
+
+
+        function searchSongs() {
+
+            const query = document.getElementById(
+                "searchInput"
+            ).value.trim().toLowerCase();
+
+            currentSongs = songs.filter(song =>
+
+                song.title.toLowerCase().includes(query) ||
+
+                song.artist.toLowerCase().includes(query) ||
+
+                song.category.toLowerCase().includes(query)
+
+            );
+
+            document.getElementById("songsTitle").textContent =
+                "🔍 نتائج البحث";
+
+            renderSongs(currentSongs);
+
+        }
+
+
+        function setActiveNav(button) {
+
+            document.querySelectorAll(".nav-item").forEach(
+                item => item.classList.remove("active")
+            );
+
+            button.classList.add("active");
+
+        }
+
+
+        function goHome(button) {
+
+            setActiveNav(button);
+            showAll();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        function goSearch(button) {
+
+            setActiveNav(button);
+
+            document.getElementById("searchInput").focus();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        document.getElementById("searchInput")
+            .addEventListener("input", searchSongs);
+
+
+        renderSongs(songs);
+    </script>
+
+</body>
+
+</html>
